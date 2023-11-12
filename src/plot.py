@@ -96,4 +96,4 @@ def plot_profiles(gs, axes):
     :param gs: geopandas.GeoSeries with profiles
     :param axes: matplotlib.axes.Axes to plot profiles on
     """
-    gs.plot(ax=axes, color="black")
+    gs.plot(ax=axes, color="black", linestyle='--', linewidth=1)
