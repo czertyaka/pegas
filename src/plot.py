@@ -3,7 +3,10 @@
 from math import floor, ceil, log10
 import matplotlib.pyplot as plt
 from matplotlib import colormaps, colors, cm
+import matplotlib.patheffects as pe
+from adjustText import adjust_text
 import contextily as cx
+import osmnx as ox
 
 
 def create_plot():
@@ -30,6 +33,42 @@ def plot_doses(df, axes, fig):
     df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=14)
 
 
+def annotate_objects(axes):
+    """Add objects annotations to a plot
+
+    :param axes: matplotlib.axes.Axes to annotate objects on
+    """
+    south = axes.get_ylim()[0]
+    north = axes.get_ylim()[1]
+    west = axes.get_xlim()[0]
+    east = axes.get_xlim()[1]
+    gdf = ox.features.features_from_bbox(
+        north=north, south=south, east=east, west=west, tags={"water": True}
+    )
+    gdf = gdf.drop_duplicates(subset="name")
+    gdf = gdf.to_crs(epsg=2263)
+    gdf["centroid"] = gdf.centroid.to_crs(epsg=4326)
+    gdf = gdf.to_crs(epsg=4326)
+    annotations = []
+    for _, row in gdf.iterrows():
+        if row["name"] != row["name"]:
+            continue
+        annotation = axes.annotate(
+            row["name"],
+            (row["centroid"].x, row["centroid"].y),
+            zorder=1,
+            annotation_clip=True,
+            clip_on=True,
+            ha="center",
+            c="teal",
+            wrap=True,
+            fontsize=8,
+            path_effects=[pe.withStroke(linewidth=2, foreground="white")],
+        )
+        annotations.append(annotation)
+    adjust_text(texts=annotations, avoid_self=False, ax=axes, ensure_inside_axes=False)
+
+
 def plot_basemap(axes, crs):
     """Plot background map
 
@@ -37,6 +76,7 @@ def plot_basemap(axes, crs):
     :param crs: CRS in string format
     """
     cx.add_basemap(ax=axes, crs=crs, attribution="")
+    annotate_objects(axes)
 
 
 def plot_profiles(gs, axes):
