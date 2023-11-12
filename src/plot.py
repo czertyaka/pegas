@@ -9,12 +9,18 @@ import contextily as cx
 import osmnx as ox
 
 
-def create_plot():
+def create_plot(bounds):
     """Create figure to put axes on
 
+    :param bounds: box of xmin, ymin, xmax, ymax
     :returns: tuple of matplotlib.figure.Figure and matplotlib.axes.Axes
     """
-    return plt.subplots(figsize=[9, 5])
+    ratio = (bounds[2] - bounds[0])/(bounds[3] - bounds[1])
+    figsize=[10*ratio, 10]
+    fig, axes = plt.subplots(figsize=figsize)
+    axes.set_ylim(bottom=bounds[1], top=bounds[3])
+    axes.set_xlim(left=bounds[0], right=bounds[2])
+    return (fig, axes)
 
 
 def plot_doses(df, axes, fig):

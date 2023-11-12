@@ -27,6 +27,6 @@ args_parser.add_argument(
     "--plot-file",
     help="""Output image file path""",
     required=False,
-    type=argparse.FileType("w"),
+    type=argparse.FileType("wb"),
     dest="plot_file",
 )

@@ -14,9 +14,7 @@ def main():
     doses_df = parse_doses(args.doses_file)
     args.doses_file.close()
     doses_gdf = create_doses_gdf(doses_df)
-    fig, axes = create_plot()
-    axes.set_ylim(bottom=doses_gdf.total_bounds[1], top=doses_gdf.total_bounds[3])
-    axes.set_xlim(left=doses_gdf.total_bounds[0], right=doses_gdf.total_bounds[2])
+    fig, axes = create_plot(doses_gdf.total_bounds)
     plot_basemap(axes, doses_gdf.crs.to_string())
     plot_doses(doses_gdf, axes, fig)
     axes.set_xlabel(doses_df.longitude)
@@ -26,7 +24,11 @@ def main():
         args.profiles_file.close()
         profiles_gs = create_profiles_gs(profiles_df)
         plot_profiles(profiles_gs, axes)
-    plt.show()
+    if args.plot_file is not None:
+        plt.savefig(args.plot_file, bbox_inches='tight')
+        args.plot_file.close()
+    else:
+        plt.show()
 
 
 if __name__ == "__main__":
