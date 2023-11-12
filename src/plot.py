@@ -18,8 +18,10 @@ def create_plot(bounds):
     ratio = (bounds[2] - bounds[0]) / (bounds[3] - bounds[1])
     figsize = [10 * ratio, 10]
     fig, axes = plt.subplots(figsize=figsize)
-    axes.set_ylim(bottom=bounds[1], top=bounds[3])
-    axes.set_xlim(left=bounds[0], right=bounds[2])
+    y_margin = (bounds[3] - bounds[1]) / 20
+    x_margin = (bounds[2] - bounds[0]) / 20
+    axes.set_ylim(bottom=bounds[1] - y_margin, top=bounds[3] + y_margin)
+    axes.set_xlim(left=bounds[0] - x_margin, right=bounds[2] + x_margin)
     return (fig, axes)
 
 
