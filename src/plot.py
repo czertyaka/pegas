@@ -3,7 +3,6 @@
 from math import floor, ceil, log10
 import matplotlib.pyplot as plt
 from matplotlib import colormaps, colors, cm
-import geopandas as gpd
 import contextily as cx
 
 
@@ -23,12 +22,12 @@ def plot_doses(df, axes, fig):
     :param fig: matplotlib.figure.Figure to plot colorbar on
     """
     cmap = colormaps["jet"]
-    dosesIndex = df.columns[0]
-    vmin = pow(10, floor(log10(df[dosesIndex].min())))
-    vmax = pow(10, ceil(log10(df[dosesIndex].max())))
+    doses_index = df.columns[0]
+    vmin = pow(10, floor(log10(df[doses_index].min())))
+    vmax = pow(10, ceil(log10(df[doses_index].max())))
     norm = colors.LogNorm(vmin, vmax)
-    fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=axes, label=dosesIndex)
-    df.plot(column=dosesIndex, ax=axes, norm=norm, cmap=cmap, markersize=14)
+    fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=axes, label=doses_index)
+    df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=14)
 
 
 def plot_basemap(axes, crs):

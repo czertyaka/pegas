@@ -25,7 +25,7 @@ def create_profiles_gs(df):
     :returns: geopandas.GeoSeries with profiles geometry
     """
     gs = gpd.GeoSeries(crs=4326)
-    for index, row in df.iterrows():
+    for _, row in df.iterrows():
         line = LineString(
             [
                 [row[df.lon_first], row[df.lat_first]],
