@@ -1,6 +1,7 @@
 """ Parsing CSV file with doses """
 import pandas as pd
 
+
 def parse_doses(file):
     """Parse coordiantes and doses to pamdas.DataFrame object
 
