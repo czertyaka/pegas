@@ -1,6 +1,7 @@
 """ Parsing CSV file with profiles """
 import pandas as pd
 
+
 def parse_profiles(file):
     """Parse CSV file with profiles to pandas.DataFrame object
 
