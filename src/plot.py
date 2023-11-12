@@ -15,8 +15,8 @@ def create_plot(bounds):
     :param bounds: box of xmin, ymin, xmax, ymax
     :returns: tuple of matplotlib.figure.Figure and matplotlib.axes.Axes
     """
-    ratio = (bounds[2] - bounds[0])/(bounds[3] - bounds[1])
-    figsize=[10*ratio, 10]
+    ratio = (bounds[2] - bounds[0]) / (bounds[3] - bounds[1])
+    figsize = [10 * ratio, 10]
     fig, axes = plt.subplots(figsize=figsize)
     axes.set_ylim(bottom=bounds[1], top=bounds[3])
     axes.set_xlim(left=bounds[0], right=bounds[2])
