@@ -13,13 +13,15 @@ def main():
     args = args_parser.parse_args()
     doses_df = parse_doses(args.doses_file)
     doses_gdf = create_doses_gdf(doses_df)
-    fig, ax = create_plot()
-    plot_doses(doses_gdf, ax, fig)
+    fig, axes = create_plot()
+    plot_doses(doses_gdf, axes, fig)
+    axes.set_xlabel(doses_df.longitude)
+    axes.set_ylabel(doses_df.latitude)
     if args.profiles_file is not None:
         profiles_df = parse_profiles(args.profiles_file)
         profiles_gs = create_profiles_gs(profiles_df)
-        plot_profiles(profiles_gs, ax)
-    plot_basemap(ax, doses_gdf.crs.to_string())
+        plot_profiles(profiles_gs, axes)
+    plot_basemap(axes, doses_gdf.crs.to_string())
     plt.show()
 
 
