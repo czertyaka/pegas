@@ -11,7 +11,7 @@ def create_plot():
 
     :returns: tuple of matplotlib.figure.Figure and matplotlib.axes.Axes
     """
-    return plt.subplots(figsize=[8.3, 6])
+    return plt.subplots(figsize=[9, 5])
 
 
 def plot_doses(df, axes, fig):
