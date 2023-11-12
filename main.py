@@ -12,6 +12,7 @@ def main():
     """Pegas script entry point"""
     args = args_parser.parse_args()
     doses_df = parse_doses(args.doses_file)
+    args.doses_file.close()
     doses_gdf = create_doses_gdf(doses_df)
     fig, axes = create_plot()
     plot_doses(doses_gdf, axes, fig)
@@ -19,6 +20,7 @@ def main():
     axes.set_ylabel(doses_df.latitude)
     if args.profiles_file is not None:
         profiles_df = parse_profiles(args.profiles_file)
+        args.profiles_file.close()
         profiles_gs = create_profiles_gs(profiles_df)
         plot_profiles(profiles_gs, axes)
     plot_basemap(axes, doses_gdf.crs.to_string())
