@@ -25,7 +25,7 @@ def main():
         profiles_gs = create_profiles_gs(profiles_df)
         plot_profiles(profiles_gs, axes)
     if args.plot_file is not None:
-        plt.savefig(args.plot_file, bbox_inches="tight")
+        plt.savefig(args.plot_file, bbox_inches="tight", dpi=600)
         args.plot_file.close()
     else:
         plt.show()
