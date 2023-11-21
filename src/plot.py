@@ -43,6 +43,7 @@ def plot_doses(df, axes, fig):
     vmax = pow(10, ceil(log10(df[doses_index].max())))
     norm = colors.LogNorm(vmin, vmax)
     fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=axes, label=doses_index)
+    # df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=50, edgecolor="black")
     df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=14)
 
 
@@ -57,7 +58,7 @@ def annotate_objects(axes):
     east = axes.get_xlim()[1]
     try:
         gdf = ox.features.features_from_bbox(
-            north=north, south=south, east=east, west=west, tags={"water": True}
+            north=north, south=south, east=east, west=west, tags={"water": "lake"}
         )
     except:
         return
@@ -82,7 +83,7 @@ def annotate_objects(axes):
             path_effects=[pe.withStroke(linewidth=2, foreground="white")],
         )
         annotations.append(annotation)
-    adjust_text(texts=annotations, avoid_self=False, ax=axes, ensure_inside_axes=False)
+    # adjust_text(texts=annotations, avoid_self=False, ax=axes, ensure_inside_axes=False)
 
 
 def plot_basemap(axes, crs):
