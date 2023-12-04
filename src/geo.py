@@ -11,11 +11,15 @@ def create_doses_gdf(df):
     :param: pandas.DataFrame with dose rates
     :returns: geopandas.GeoDataFrame with dose rates
     """
-    return gpd.GeoDataFrame(
-        df[df.doses],
+    gdf = gpd.GeoDataFrame(
+        df[df.doses] if hasattr(df, "labels") is False else df[[df.doses, df.labels]],
         geometry=gpd.points_from_xy(df[df.longitude], df[df.latitude]),
         crs=4326,
     )
+    gdf.doses = df.doses
+    if hasattr(df, "labels"):
+        gdf.labels = df.labels
+    return gdf
 
 
 def create_profiles_gs(df):

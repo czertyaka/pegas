@@ -38,13 +38,26 @@ def plot_doses(df, axes, fig):
     :param fig: matplotlib.figure.Figure to plot colorbar on
     """
     cmap = colormaps["jet"]
-    doses_index = df.columns[0]
+    doses_index = df.doses
     vmin = pow(10, floor(log10(df[doses_index].min())))
     vmax = pow(10, ceil(log10(df[doses_index].max())))
     norm = colors.LogNorm(vmin, vmax)
     fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=axes, label=doses_index)
-    # df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=50, edgecolor="black")
-    df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=14)
+    df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=50, edgecolor="black")
+    # df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=14)
+    if not hasattr(df, "labels"):
+        return
+    annotations = []
+    for _, row in df.iterrows():
+        annotation = axes.annotate(
+            row[df.labels],
+            (row.geometry.x, row.geometry.y),
+            ha="center",
+            fontsize=8,
+            path_effects=[pe.withStroke(linewidth=2, foreground="white")],
+        )
+        annotations.append(annotation)
+    adjust_text(texts=annotations, ax=axes)
 
 
 def annotate_objects(axes):

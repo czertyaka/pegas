@@ -15,4 +15,6 @@ def parse_doses(file):
     df.longitude = df.columns[0]
     df.latitude = df.columns[1]
     df.doses = df.columns[2]
+    if df.shape[1] > 3:
+        df.labels = df.columns[3]
     return df
