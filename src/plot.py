@@ -26,7 +26,7 @@ def create_plot(bounds):
     x_margin = (bounds[2] - bounds[0]) / 20
     axes.set_ylim(bottom=bounds[1] - y_margin, top=bounds[3] + y_margin)
     axes.set_xlim(left=bounds[0] - x_margin, right=bounds[2] + x_margin)
-    cid = fig.canvas.mpl_connect('button_press_event', mouse_event)
+    fig.canvas.mpl_connect('button_press_event', mouse_event)
     return (fig, axes)
 
 
@@ -43,8 +43,8 @@ def plot_doses(df, axes, fig):
     vmax = pow(10, ceil(log10(df[doses_index].max())))
     norm = colors.LogNorm(vmin, vmax)
     fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=axes, label=doses_index)
-    df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=50, edgecolor="black")
-    # df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=14)
+    # df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=50, edgecolor="black")
+    df.plot(column=doses_index, ax=axes, norm=norm, cmap=cmap, markersize=14)
     if not hasattr(df, "labels"):
         return
     annotations = []
@@ -73,7 +73,8 @@ def annotate_objects(axes):
         gdf = ox.features.features_from_bbox(
             north=north, south=south, east=east, west=west, tags={"water": "lake"}
         )
-    except:
+    except Exception as e:
+        print(f"Error: {e}")
         return
     gdf = gdf.drop_duplicates(subset="name")
     gdf = gdf.to_crs(epsg=2263)
