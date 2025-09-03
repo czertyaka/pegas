@@ -30,3 +30,13 @@ args_parser.add_argument(
     type=argparse.FileType("wb"),
     dest="plot_file",
 )
+args_parser.add_argument(
+    "-t",
+    "--plot-type",
+    help="""Plot type (default: scatter)""",
+    choices=["scatter", "heatmap"],
+    default="scatter",
+    required=False,
+    type=str,
+    dest="plot_type"
+)

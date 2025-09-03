@@ -7,6 +7,9 @@ import matplotlib.patheffects as pe
 from adjustText import adjust_text
 import contextily as cx
 import osmnx as ox
+import pandas as pd
+from scipy.ndimage import gaussian_filter
+import numpy as np
 
 
 def mouse_event(event):
@@ -58,6 +61,30 @@ def plot_doses(df, axes, fig):
         )
         annotations.append(annotation)
     adjust_text(texts=annotations, ax=axes)
+
+
+def plot_doses_heatmap(df, axes, fig):
+    cmap = colormaps["jet"]
+    doses_index = df.doses
+    vmin = pow(10, floor(log10(df[doses_index].min())))
+    vmax = pow(10, ceil(log10(df[doses_index].max())))
+    norm = colors.LogNorm(vmin, vmax)
+    fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=axes, label=doses_index)
+
+    df['x'] = df.geometry.x
+    df['y'] = df.geometry.y
+
+    pv = pd.pivot_table(df, index='y', columns='x', values=df.doses)
+    x = pv.columns.values
+    y = pv.index.values
+    doses = gaussian_filter(pv.values, sigma=4)
+
+    axes.pcolormesh(x, y, doses, cmap=cmap, norm=norm)
+
+    _, ymin, _, ymax = df.total_bounds
+    df_y = (ymax + ymin) / 2
+    aspect = 1 / np.cos(np.radians(df_y))
+    axes.set_aspect(aspect)
 
 
 def annotate_objects(axes):
