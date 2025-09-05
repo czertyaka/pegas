@@ -1,4 +1,4 @@
-""" Pegas plotting facilities """
+"""Pegas plotting facilities"""
 
 from math import floor, ceil, log10
 import matplotlib.pyplot as plt
@@ -7,6 +7,8 @@ import matplotlib.patheffects as pe
 from adjustText import adjust_text
 import contextily as cx
 import osmnx as ox
+import pandas as pd
+import numpy as np
 
 
 def mouse_event(event):
@@ -26,7 +28,7 @@ def create_plot(bounds):
     x_margin = (bounds[2] - bounds[0]) / 20
     axes.set_ylim(bottom=bounds[1] - y_margin, top=bounds[3] + y_margin)
     axes.set_xlim(left=bounds[0] - x_margin, right=bounds[2] + x_margin)
-    fig.canvas.mpl_connect('button_press_event', mouse_event)
+    fig.canvas.mpl_connect("button_press_event", mouse_event)
     return (fig, axes)
 
 
@@ -60,22 +62,42 @@ def plot_doses(df, axes, fig):
     adjust_text(texts=annotations, ax=axes)
 
 
+def plot_doses_heatmap(df, axes, fig):
+    cmap = colormaps["YlOrRd"]
+    doses_index = df.doses
+    vmin = pow(10, floor(log10(df[doses_index].min())))
+    vmax = pow(10, ceil(log10(df[doses_index].max())))
+    norm = colors.LogNorm(vmin, vmax)
+    fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=axes, label=doses_index)
+
+    df["x"] = df.geometry.x
+    df["y"] = df.geometry.y
+
+    pv = pd.pivot_table(df, index="y", columns="x", values=df.doses)
+    x = pv.columns.values
+    y = pv.index.values
+    doses = pv.values
+
+    axes.pcolormesh(x, y, doses, cmap=cmap, norm=norm)
+
+    _, ymin, _, ymax = df.total_bounds
+    df_y = (ymax + ymin) / 2
+    aspect = 1 / np.cos(np.radians(df_y))
+    axes.set_aspect(aspect)
+
+
 def annotate_objects(axes):
     """Add objects annotations to a plot
 
     :param axes: matplotlib.axes.Axes to annotate objects on
     """
-    south = axes.get_ylim()[0]
-    north = axes.get_ylim()[1]
-    west = axes.get_xlim()[0]
-    east = axes.get_xlim()[1]
-    try:
-        gdf = ox.features.features_from_bbox(
-            north=north, south=south, east=east, west=west, tags={"water": "lake"}
-        )
-    except Exception as e:
-        print(f"Error: {e}")
-        return
+    bottom = axes.get_ylim()[0]
+    top = axes.get_ylim()[1]
+    left = axes.get_xlim()[0]
+    right = axes.get_xlim()[1]
+    gdf = ox.features.features_from_bbox(
+        bbox=(left, bottom, right, top), tags={"water": "lake"}
+    )
     gdf = gdf.drop_duplicates(subset="name")
     gdf = gdf.to_crs(epsg=2263)
     gdf["centroid"] = gdf.centroid.to_crs(epsg=4326)
@@ -116,4 +138,13 @@ def plot_profiles(gs, axes):
     :param gs: geopandas.GeoSeries with profiles
     :param axes: matplotlib.axes.Axes to plot profiles on
     """
-    gs.plot(ax=axes, color="black", linestyle='--', linewidth=1)
+    gs.plot(ax=axes, color="black", linestyle="--", linewidth=1)
+
+
+def plot_clip_borders(df, axes):
+    """Plot clip border
+
+    :param df: geopandas.GeoDataFrame with clip polygon
+    :param axes: matplotlib.axes.Axes to plot profiles on
+    """
+    df.plot(ax=axes, linewidth=1, edgecolor="black", facecolor="none")

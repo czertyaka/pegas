@@ -1,4 +1,5 @@
-""" Parsing CSV file with doses """
+"""Parsing CSV file with doses"""
+
 import pandas as pd
 
 

@@ -16,6 +16,7 @@ pkgs.mkShellNoCC {
     pkgs.python3Packages.osmnx
     pkgs.python3Packages.pandas
     pkgs.python3Packages.shapely
+    pkgs.python3Packages.scipy
     nur.repos.sikmir.contextily
   ];
 }
