@@ -1,4 +1,4 @@
-""" Convert regular data frames to geo data frames """
+"""Convert regular data frames to geo data frames"""
 
 from shapely.geometry import LineString
 import pandas as pd
@@ -42,7 +42,7 @@ def create_profiles_gs(df):
 
 def create_clip_polygon(clip_file):
     """Create polygon for data clipping from GeoJson file
-        
+
     :param file: GeoJson file with at least one polygon
     :returns: polygon
     """
@@ -50,9 +50,10 @@ def create_clip_polygon(clip_file):
     if len(gdf) == 0:
         raise ValueError(f"GeoJson file {clip_file} empty")
     poly = gdf.iloc[0]
-    if poly.geometry.geom_type != 'Polygon':
-        raise ValueError(f"GeoJson file {clip_file} does not have "
-                         "polygon as its first entry")
+    if poly.geometry.geom_type != "Polygon":
+        raise ValueError(
+            f"GeoJson file {clip_file} does not have " "polygon as its first entry"
+        )
     return poly
 
 

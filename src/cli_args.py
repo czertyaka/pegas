@@ -1,4 +1,5 @@
-""" Pegas CLI arguments parsing """
+"""Pegas CLI arguments parsing"""
+
 import argparse
 
 args_parser = argparse.ArgumentParser(
@@ -38,7 +39,7 @@ args_parser.add_argument(
     default="scatter",
     required=False,
     type=str,
-    dest="plot_type"
+    dest="plot_type",
 )
 args_parser.add_argument(
     "-o",

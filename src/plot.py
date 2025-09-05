@@ -1,4 +1,4 @@
-""" Pegas plotting facilities """
+"""Pegas plotting facilities"""
 
 from math import floor, ceil, log10
 import matplotlib.pyplot as plt
@@ -29,7 +29,7 @@ def create_plot(bounds):
     x_margin = (bounds[2] - bounds[0]) / 20
     axes.set_ylim(bottom=bounds[1] - y_margin, top=bounds[3] + y_margin)
     axes.set_xlim(left=bounds[0] - x_margin, right=bounds[2] + x_margin)
-    fig.canvas.mpl_connect('button_press_event', mouse_event)
+    fig.canvas.mpl_connect("button_press_event", mouse_event)
     return (fig, axes)
 
 
@@ -71,10 +71,10 @@ def plot_doses_heatmap(df, axes, fig):
     norm = colors.LogNorm(vmin, vmax)
     fig.colorbar(cm.ScalarMappable(norm=norm, cmap=cmap), ax=axes, label=doses_index)
 
-    df['x'] = df.geometry.x
-    df['y'] = df.geometry.y
+    df["x"] = df.geometry.x
+    df["y"] = df.geometry.y
 
-    pv = pd.pivot_table(df, index='y', columns='x', values=df.doses)
+    pv = pd.pivot_table(df, index="y", columns="x", values=df.doses)
     x = pv.columns.values
     y = pv.index.values
     doses = gaussian_filter(pv.values, sigma=4)
@@ -139,4 +139,4 @@ def plot_profiles(gs, axes):
     :param gs: geopandas.GeoSeries with profiles
     :param axes: matplotlib.axes.Axes to plot profiles on
     """
-    gs.plot(ax=axes, color="black", linestyle='--', linewidth=1)
+    gs.plot(ax=axes, color="black", linestyle="--", linewidth=1)

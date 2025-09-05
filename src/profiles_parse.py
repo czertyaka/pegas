@@ -1,4 +1,5 @@
-""" Parsing CSV file with profiles """
+"""Parsing CSV file with profiles"""
+
 import pandas as pd
 
 
