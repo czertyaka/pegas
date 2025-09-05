@@ -23,12 +23,12 @@ args_parser.add_argument(
     dest="profiles_file",
 )
 args_parser.add_argument(
-    "-p",
-    "--plot-file",
-    help="""Output image file path""",
+    "-c",
+    "--clip-file",
+    help="""Geojson file with single polygon to clip shown data""",
     required=False,
-    type=argparse.FileType("wb"),
-    dest="plot_file",
+    type=argparse.FileType("r"),
+    dest="clip_file",
 )
 args_parser.add_argument(
     "-t",
@@ -39,4 +39,12 @@ args_parser.add_argument(
     required=False,
     type=str,
     dest="plot_type"
+)
+args_parser.add_argument(
+    "-o",
+    "--output",
+    help="""Output image file path, open image if not given""",
+    required=False,
+    type=argparse.FileType("wb"),
+    dest="plot_file",
 )

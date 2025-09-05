@@ -5,7 +5,7 @@ from src.cli_args import args_parser
 from src.doses_parse import parse_doses
 from src.doses_interp import interpolate_doses
 from src.profiles_parse import parse_profiles
-from src.geo import create_doses_gdf, create_profiles_gs
+from src.geo import create_doses_gdf, create_profiles_gs, create_clip_polygon, clip_doses
 from src.plot import create_plot, plot_doses, plot_basemap, plot_profiles, plot_doses_heatmap
 
 
@@ -19,6 +19,9 @@ def main():
     doses_gdf = create_doses_gdf(doses_df)
     fig, axes = create_plot(doses_gdf.total_bounds)
     plot_basemap(axes, doses_gdf.crs.to_string())
+    if args.clip_file is not None:
+        clip_polygon = create_clip_polygon(args.clip_file)
+        doses_gdf = clip_doses(doses_gdf, clip_polygon)
     if args.plot_type == "scatter":
         plot_doses(doses_gdf, axes, fig)
     elif args.plot_type == "heatmap":

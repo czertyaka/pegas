@@ -38,3 +38,31 @@ def create_profiles_gs(df):
         )
         gs = pd.concat([gs, gpd.GeoSeries(line, crs=4326)])
     return gs
+
+
+def create_clip_polygon(clip_file):
+    """Create polygon for data clipping from GeoJson file
+        
+    :param file: GeoJson file with at least one polygon
+    :returns: polygon
+    """
+    gdf = gpd.read_file(clip_file)
+    if len(gdf) == 0:
+        raise ValueError(f"GeoJson file {clip_file} empty")
+    poly = gdf.iloc[0]
+    if poly.geometry.geom_type != 'Polygon':
+        raise ValueError(f"GeoJson file {clip_file} does not have "
+                         "polygon as its first entry")
+    return poly
+
+
+def clip_doses(doses_gdf, clip_polygon):
+    """Clip doses in GeoDataFrame by custom Polygon
+
+    :param doses_gdf: GeoDataFrame with doses to clip
+    :param clip_polygon: GeoSeries with Polygon to clip by
+    :returns: New GeoDataFrame with doses
+    """
+    gdf = doses_gdf.clip(clip_polygon.geometry)
+    gdf.doses = doses_gdf.doses
+    return gdf
