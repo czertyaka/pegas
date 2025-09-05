@@ -44,9 +44,10 @@ def create_clip_polygon(clip_file):
     """Create polygon for data clipping from GeoJson file
 
     :param file: GeoJson file with at least one polygon
-    :returns: polygon
+    :returns: GeoDataFrame with polygon
     """
     gdf = gpd.read_file(clip_file)
+    gdf = gdf.to_crs(epsg=4326)
     if len(gdf) == 0:
         raise ValueError(f"GeoJson file {clip_file} empty")
     poly = gdf.iloc[0]
@@ -54,7 +55,7 @@ def create_clip_polygon(clip_file):
         raise ValueError(
             f"GeoJson file {clip_file} does not have " "polygon as its first entry"
         )
-    return poly
+    return gdf
 
 
 def clip_doses(doses_gdf, clip_polygon):
@@ -64,6 +65,7 @@ def clip_doses(doses_gdf, clip_polygon):
     :param clip_polygon: GeoSeries with Polygon to clip by
     :returns: New GeoDataFrame with doses
     """
-    gdf = doses_gdf.clip(clip_polygon.geometry)
+    assert doses_gdf.crs == clip_polygon.crs
+    gdf = gpd.clip(doses_gdf, clip_polygon)
     gdf.doses = doses_gdf.doses
     return gdf

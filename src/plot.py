@@ -8,7 +8,6 @@ from adjustText import adjust_text
 import contextily as cx
 import osmnx as ox
 import pandas as pd
-from scipy.ndimage import gaussian_filter
 import numpy as np
 
 
@@ -77,7 +76,7 @@ def plot_doses_heatmap(df, axes, fig):
     pv = pd.pivot_table(df, index="y", columns="x", values=df.doses)
     x = pv.columns.values
     y = pv.index.values
-    doses = gaussian_filter(pv.values, sigma=4)
+    doses = pv.values
 
     axes.pcolormesh(x, y, doses, cmap=cmap, norm=norm)
 

@@ -3,6 +3,7 @@
 from scipy.interpolate import LinearNDInterpolator
 import numpy as np
 import pandas as pd
+from scipy.ndimage import gaussian_filter
 
 
 def interpolate_doses(df):
@@ -31,4 +32,20 @@ def interpolate_doses(df):
     interp_df.latitude = df.latitude
     interp_df.doses = df.doses
 
+    interp_df = gauss_doses(interp_df)
     return interp_df
+
+
+def gauss_doses(df):
+    pv = pd.pivot_table(df, index=df.latitude, columns=df.longitude, values=df.doses)
+    doses = pv.to_numpy()
+    doses = np.log(doses)
+    doses = gaussian_filter(doses, sigma=8, mode="nearest")
+    doses = np.exp(doses)
+    pv[:] = doses
+    blurred_df = pv.melt(value_name=df.doses, ignore_index=False)
+    blurred_df = blurred_df.reset_index()
+    blurred_df.doses = df.doses
+    blurred_df.longitude = df.longitude
+    blurred_df.latitude = df.latitude
+    return blurred_df
