@@ -17,6 +17,7 @@ from src.plot import (
     plot_basemap,
     plot_profiles,
     plot_doses_heatmap,
+    plot_clip_borders,
 )
 
 
@@ -44,6 +45,8 @@ def main():
         args.profiles_file.close()
         profiles_gs = create_profiles_gs(profiles_df)
         plot_profiles(profiles_gs, axes)
+    if args.clip_file is not None:
+        plot_clip_borders(clip_polygon, axes)
     if args.plot_file is not None:
         plt.savefig(args.plot_file, bbox_inches="tight", dpi=600)
         args.plot_file.close()

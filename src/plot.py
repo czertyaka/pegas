@@ -139,3 +139,12 @@ def plot_profiles(gs, axes):
     :param axes: matplotlib.axes.Axes to plot profiles on
     """
     gs.plot(ax=axes, color="black", linestyle="--", linewidth=1)
+
+
+def plot_clip_borders(df, axes):
+    """Plot clip border
+
+    :param df: geopandas.GeoDataFrame with clip polygon
+    :param axes: matplotlib.axes.Axes to plot profiles on
+    """
+    df.plot(ax=axes, linewidth=1, edgecolor="black", facecolor="none")
