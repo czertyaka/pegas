@@ -63,7 +63,7 @@ def plot_doses(df, axes, fig):
 
 
 def plot_doses_heatmap(df, axes, fig):
-    cmap = colormaps["jet"]
+    cmap = colormaps["YlOrRd"]
     doses_index = df.doses
     vmin = pow(10, floor(log10(df[doses_index].min())))
     vmax = pow(10, ceil(log10(df[doses_index].max())))
