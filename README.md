@@ -50,7 +50,8 @@ lon_1;lat_1;lon_2;lat_2
 
 ```shell
 $ python main.py --help
-usage: pegas [-h] -d DOSES_FILE [-pr PROFILES_FILE] [-p PLOT_FILE]
+usage: pegas [-h] -d DOSES_FILE [-pr PROFILES_FILE] [-c CLIP_FILE] [-t {scatter,heatmap}]
+             [-o PLOT_FILE]
 
 PEdestrian GAmma Survey (pegas) is designed to plot pedestrian gamma-ray survey results.
 
@@ -60,8 +61,12 @@ options:
                         CSV file path with cooridnates and dose rates
   -pr PROFILES_FILE, --profiles-file PROFILES_FILE
                         CSV file path with profiles coordinates
-  -p PLOT_FILE, --plot-file PLOT_FILE
-                        Output image file path
+  -c CLIP_FILE, --clip-file CLIP_FILE
+                        Geojson file with single polygon to clip shown data
+  -t {scatter,heatmap}, --plot-type {scatter,heatmap}
+                        Plot type (default: scatter)
+  -o PLOT_FILE, --output PLOT_FILE
+                        Output image file path, open image if not given
 ```
 
 ## Пример

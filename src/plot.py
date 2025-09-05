@@ -98,6 +98,8 @@ def annotate_objects(axes):
     gdf = ox.features.features_from_bbox(
         bbox=(left, bottom, right, top), tags={"water": "lake"}
     )
+    if "name" not in gdf.columns:
+        return
     gdf = gdf.drop_duplicates(subset="name")
     gdf = gdf.to_crs(epsg=2263)
     gdf["centroid"] = gdf.centroid.to_crs(epsg=4326)
