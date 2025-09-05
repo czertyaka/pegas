@@ -92,17 +92,13 @@ def annotate_objects(axes):
 
     :param axes: matplotlib.axes.Axes to annotate objects on
     """
-    south = axes.get_ylim()[0]
-    north = axes.get_ylim()[1]
-    west = axes.get_xlim()[0]
-    east = axes.get_xlim()[1]
-    try:
-        gdf = ox.features.features_from_bbox(
-            north=north, south=south, east=east, west=west, tags={"water": "lake"}
-        )
-    except Exception as e:
-        print(f"Error: {e}")
-        return
+    bottom = axes.get_ylim()[0]
+    top = axes.get_ylim()[1]
+    left = axes.get_xlim()[0]
+    right = axes.get_xlim()[1]
+    gdf = ox.features.features_from_bbox(
+        bbox=(left, bottom, right, top), tags={"water": "lake"}
+    )
     gdf = gdf.drop_duplicates(subset="name")
     gdf = gdf.to_crs(epsg=2263)
     gdf["centroid"] = gdf.centroid.to_crs(epsg=4326)
